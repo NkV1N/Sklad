@@ -1,0 +1,81 @@
+﻿<Page x:Class="Warehouse.Views.ProductPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Warehouse.Views"
+      DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource Self}}"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ProductPage">
+
+    <DockPanel>
+        <Label DockPanel.Dock="Top" FontSize="35" FontWeight="Bold" Foreground="CadetBlue"
+           Content="Товары" Margin="0 0 0 25"/>
+        <StackPanel Orientation="Horizontal" 
+        DockPanel.Dock="Top">
+            <Label Content="Поиск товара по названию: " FontSize="18" VerticalAlignment="Center" 
+               Style="{DynamicResource MaterialDesignLabel}"/>
+            <TextBox Width="200" x:Name="searchText" TextChanged="search"
+         Style="{DynamicResource MaterialDesignTextBox}" FontSize="18"/>
+            <Label Content="Выбрать по категории товара: " FontSize="18" Margin="10 0 0 0"
+        VerticalAlignment="Center" Style="{DynamicResource MaterialDesignLabel}"/>
+            <ComboBox Width="250" x:Name="filterComboBox" SelectionChanged="filter" ItemsSource="{Binding CategoryFilters}"
+                  Style="{DynamicResource MaterialDesignComboBox}" FontSize="18">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <Label Content="{Binding Key}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Button Margin="150 0 0 0" Click="goToUpdateProductPage" Style="{DynamicResource MaterialDesignFlatAccentBgButton}" Background="Transparent">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Height="25" Width="25" Kind="DatabaseAdd" Margin="5 0" />
+                    <TextBlock Style="{DynamicResource MaterialDesignTextBlock}">Добавить товар</TextBlock>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <StatusBar DockPanel.Dock="Bottom" Background="{DynamicResource SecondaryHueMidBrush}" >
+            <TextBlock>
+             Показано <Run Text="{Binding CurrentCount}" /> из <Run Text="{Binding TotalCount}"/> записей
+            </TextBlock>
+        </StatusBar>
+        <Label x:Name="searchResultLabel" FontSize="18" Margin="10" DockPanel.Dock="Top" Visibility="Collapsed" Content="По запросу нечего не найдено!" />
+        <ListView ItemsSource="{Binding Products}" x:Name="listProduct" d:ItemsSource="{d:SampleData ItemCount=25}"
+              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border Margin="5" BorderThickness="1" BorderBrush="SteelBlue" CornerRadius="4">
+                        <Grid Width="1200">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="150"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Margin="7" Grid.Column="0">
+                                <TextBlock FontSize="22" TextWrapping="Wrap">
+                                <Run FontWeight="SemiBold" FontStyle="Italic"  Text="{Binding Name}"/>
+                                Категория товара -  
+                                <Run FontStyle="Italic" Text="{Binding ProductType.Name}" />.
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="3" Orientation="Horizontal"  VerticalAlignment="Center">
+                                <Button Margin="0 0 0 2" Click="editProduct" Style="{DynamicResource MaterialDesignFlatButton}">
+                                    <materialDesign:PackIcon Kind="Edit" />
+                                </Button>
+                                <Button Margin="0 0 0 2" Style="{DynamicResource MaterialDesignFlatButton}" Click="RemoveProduct">
+                                    <materialDesign:PackIcon Kind="Remove" />
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </DockPanel>
+</Page>
